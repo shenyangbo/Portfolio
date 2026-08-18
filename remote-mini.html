@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>远程柜台小程序 · Guangdong Telecom 10000</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #ffffff;
+  --bg2: #f5f8ff;
+  --bg3: #eaf0fa;
+  --surface: #ffffff;
+  --ink: #101828;
+  --ink-2: #26364d;
+  --muted: #667085;
+  --muted-2: #98a2b3;
+  --rule: #e2ecff;
+  --accent: #4a90e2;
+  --accent-dark: #3b7dd8;
+  --accent-light: #e8f4fc;
+  --accent-lighter: #f0f8ff;
+  --pink: #ff6b9d;
+  --green: #52c41a;
+  --orange: #faad14;
+  --purple: #7b61ff;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink-2);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Nav Bar ===== */
+.nav-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(16, 24, 40, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-container {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+}
+.nav-logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700; font-size: 20px; color: #fff;
+  letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .logo-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 12px var(--accent);
+}
+.nav-tabs { display: flex; gap: 4px; list-style: none; }
+.nav-tab {
+  padding: 8px 16px; font-size: 14px; color: rgba(255,255,255,0.6);
+  cursor: pointer; border-radius: 8px;
+  transition: all 0.25s ease; white-space: nowrap; font-weight: 400;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.nav-tab.active { color: #fff; background: var(--accent); font-weight: 600; }
+@media (max-width: 1100px) {
+  .nav-tabs { overflow-x: auto; }
+  .nav-tab { padding: 6px 10px; font-size: 13px; }
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  padding: 100px 40px 80px;
+  background: linear-gradient(135deg, #e8f4fc 0%, #f0f8ff 50%, #f7faff 100%);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: -30%; right: -10%;
+  width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(74,144,226,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: -20%; left: -5%;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,97,255,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-block; padding: 6px 16px; border-radius: 999px;
+  background: var(--accent-light); border: 1px solid rgba(74,144,226,0.2);
+  font-size: 13px; color: var(--accent); margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+  font-size: 48px; font-weight: 700; color: var(--ink); margin-bottom: 20px;
+  letter-spacing: -0.5px; line-height: 1.2;
+}
+.hero-desc {
+  font-size: 17px; line-height: 1.8; color: var(--muted); max-width: 760px; margin-bottom: 40px;
+}
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; gap: 4px; }
+.hero-stat-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 32px; font-weight: 700; color: var(--accent); }
+.hero-stat-label { font-size: 13px; color: var(--muted-2); }
+
+/* ===== Section ===== */
+.section { max-width: 1200px; margin: 0 auto; padding: 80px 40px; }
+.section-title {
+  font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+  font-size: 32px; font-weight: 600; color: var(--ink); margin-bottom: 12px;
+}
+.section-desc { font-size: 16px; color: var(--muted-2); margin-bottom: 48px; line-height: 1.7; }
+
+/* ===== Business Flow ===== */
+.flow { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.flow-step {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 28px 32px; background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); min-width: 160px; text-align: center;
+  transition: all 0.3s ease;
+}
+.flow-step:hover { border-color: rgba(74,144,226,0.2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,144,226,0.06); }
+.flow-icon {
+  width: 56px; height: 56px; border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.flow-icon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: var(--radius-md); }
+.flow-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+.flow-desc { font-size: 12px; color: var(--muted-2); }
+.flow-arrow { font-size: 24px; color: var(--muted-2); }
+
+/* ===== Gallery ===== */
+.gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.gallery-item {
+  background: var(--surface); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s ease;
+}
+.gallery-item:hover { border-color: rgba(74,144,226,0.2); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(74,144,226,0.08); }
+.gallery-img { width: 100%; aspect-ratio: 9/16; object-fit: cover; display: block; border-bottom: 1px solid var(--rule); }
+.gallery-info { padding: 20px 24px; }
+.gallery-name { font-size: 16px; font-weight: 600; color: var(--ink); }
+.gallery-desc { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
+.gallery-tag {
+  display: inline-block; padding: 3px 12px; border-radius: 8px;
+  font-size: 11px; margin-top: 10px;
+  background: var(--accent-light); color: var(--accent);
+}
+.gallery-tag.voice { background: rgba(123,97,255,0.1); color: var(--purple); }
+.gallery-tag.form { background: rgba(82,196,26,0.1); color: var(--green); }
+
+/* ===== Icon System ===== */
+.icon-category { margin-bottom: 48px; }
+.icon-category-title {
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.icon-category-desc { font-size: 14px; color: var(--muted-2); margin-bottom: 24px; }
+.icon-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 20px; }
+.icon-item {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  padding: 16px 8px; border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+.icon-item:hover { background: var(--bg2); transform: translateY(-2px); }
+.icon-img {
+  width: 64px; height: 64px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.icon-img img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md); }
+.icon-label { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.4; }
+
+/* ===== Design System ===== */
+.design-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.color-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.color-item {
+  border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--rule);
+}
+.color-swatch { height: 72px; }
+.color-info { padding: 10px 14px; background: var(--surface); }
+.color-name { font-size: 12px; color: var(--muted); }
+.color-value { font-size: 11px; color: var(--muted-2); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+.design-feature {
+  padding: 20px; background: var(--bg2); border-radius: var(--radius-md);
+  border: 1px solid var(--rule); margin-bottom: 16px;
+}
+.design-feature-title { font-size: 15px; color: var(--accent); margin-bottom: 8px; font-weight: 500; }
+.design-feature-desc { font-size: 13px; color: var(--muted-2); line-height: 1.7; }
+
+/* ===== Features ===== */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.feature-card {
+  background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); padding: 32px;
+  transition: all 0.3s ease;
+}
+.feature-card:hover { border-color: rgba(74,144,226,0.15); background: var(--surface); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.04); }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: var(--radius-md);
+  overflow: hidden; margin-bottom: 20px;
+}
+.feature-icon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: var(--radius-md); }
+.feature-title { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.feature-desc { font-size: 14px; line-height: 1.8; color: var(--muted); }
+
+/* ===== Service Grid ===== */
+.service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.service-card {
+  padding: 24px 20px; background: var(--bg2); border: 1px solid var(--rule);
+  border-radius: var(--radius-md); text-align: center; transition: all 0.2s ease;
+}
+.service-card:hover { border-color: rgba(74,144,226,0.2); background: var(--surface); transform: translateY(-2px); }
+.service-icon { width: 56px; height: 56px; margin: 0 auto 12px; border-radius: var(--radius-md); overflow: hidden; }
+.service-icon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: var(--radius-md); }
+.service-name { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+/* ===== Footer ===== */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 40px; text-align: center;
+}
+.footer-text { font-size: 13px; color: var(--muted-2); }
+.footer-link { color: var(--accent); text-decoration: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 968px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .design-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .icon-grid { grid-template-columns: repeat(4, 1fr); }
+  .service-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { font-size: 34px; }
+  .section { padding: 56px 24px; }
+  .hero { padding: 70px 24px 50px; }
+  .header { padding: 14px 24px; }
+}
+@media (max-width: 600px) {
+  .gallery { grid-template-columns: 1fr; }
+  .icon-grid { grid-template-columns: repeat(3, 1fr); }
+  .service-grid { grid-template-columns: 1fr; }
+  .flow { flex-direction: column; }
+  .flow-arrow { transform: rotate(90deg); }
+}
+
+.tab-content { display: block; padding-top: 64px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<!-- ===== Navigation ===== -->
+<nav class="nav-bar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <span class="logo-dot"></span>
+      <span>Portfolio</span>
+    </div>
+    <ul class="nav-tabs">
+      <li class="nav-tab"><a href="./home.html" style="text-decoration:none;color:inherit;">个人简介</a></li>
+      <li class="nav-tab"><a href="./online-cs-app.html" style="text-decoration:none;color:inherit;">在线客服 APP</a></li>
+      <li class="nav-tab active">远程柜台小程序</li>
+      <li class="nav-tab"><a href="./intensive-portal.html" style="text-decoration:none;color:inherit;">集约门户</a></li>
+      <li class="nav-tab"><a href="./monitoring-dashboard.html" style="text-decoration:none;color:inherit;">一体化监控看板</a></li>
+      <li class="nav-tab"><a href="./im-client.html" style="text-decoration:none;color:inherit;">IM 客户端</a></li>
+      <li class="nav-tab"><a href="./remote-counter.html" style="text-decoration:none;color:inherit;">远程柜台客服</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">WeChat Mini Program · Remote Counter Service</span>
+    <h1 class="hero-title">广东10000号远程柜台小程序</h1>
+    <p class="hero-desc">面向中国电信广东用户的微信小程序端远程柜台服务平台，将线下营业厅服务能力延伸至线上。涵盖补卡/换卡、销户、密码重置、过户改号等 20+ 项电信业务，通过语音交互 + 表单流程 + 实名认证的组合模式，让用户"足不出户尽享一站式服务"。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-value">20+</span><span class="hero-stat-label">业务功能</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">9</span><span class="hero-stat-label">UI 页面设计</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">21</span><span class="hero-stat-label">业务图标</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">4</span><span class="hero-stat-label">办理流程步骤</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Business Flow -->
+<div class="section">
+  <h2 class="section-title">业务办理流程</h2>
+  <p class="section-desc">标准化四步流程，从信息填写到最终受理，每步均设有安全校验节点，确保业务办理的合规性与用户信息的准确性。</p>
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-icon"><img src="./assets/remote-mini/icons/custom-form.jpg" alt="信息填写"></div>
+      <div class="flow-name">信息填写</div>
+      <div class="flow-desc">号码/身份证/姓名</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon"><img src="./assets/remote-mini/icons/custom-camera.jpg" alt="认证"></div>
+      <div class="flow-name">认证</div>
+      <div class="flow-desc">证件 + 视频拍摄</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon"><img src="./assets/remote-mini/icons/custom-shield.jpg" alt="审核"></div>
+      <div class="flow-name">审核</div>
+      <div class="flow-desc">部门审核资料</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon"><img src="./assets/remote-mini/icons/custom-check.jpg" alt="受理"></div>
+      <div class="flow-name">受理</div>
+      <div class="flow-desc">审核通过受理</div>
+    </div>
+  </div>
+</div>
+
+<!-- UI Gallery -->
+<div class="section">
+  <h2 class="section-title">UI 页面设计</h2>
+  <p class="section-desc">9 个核心界面，覆盖首页、语音交互（录音中/取消发送/关闭客服）、业务表单（销户/补卡/激活/密码重置）两大场景。采用蓝色品牌主题，语音交互状态通过蓝→紫→红色彩变化传达不同交互阶段。</p>
+  <div class="gallery">
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/广东电信10000号-首页.jpg" alt="广东电信10000号首页">
+      <div class="gallery-info">
+        <div class="gallery-name">首页 · 完整版</div>
+        <div class="gallery-desc">首页完整布局：客服形象区 + 特色业务(8项) + 更多业务(12项)，右下角悬浮在线客服入口</div>
+        <span class="gallery-tag">首页</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/v4-首页1.0.jpg" alt="v4首页1.0">
+      <div class="gallery-info">
+        <div class="gallery-name">首页 · 语音助手展开</div>
+        <div class="gallery-desc">v4 版本首页，底部语音交互面板展开，含快捷指令标签与"按住说话"输入栏</div>
+        <span class="gallery-tag voice">语音交互</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/v4-首页1.1-录音中.jpg" alt="录音中">
+      <div class="gallery-info">
+        <div class="gallery-name">语音交互 · 录音中</div>
+        <div class="gallery-desc">紫色渐变背景 + 白色点阵波形动画 + "录音中，松开发送"胶囊按钮，状态切换为紫色</div>
+        <span class="gallery-tag voice">语音交互</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/v4-首页1.2-取消发送.jpg" alt="取消发送">
+      <div class="gallery-info">
+        <div class="gallery-name">语音交互 · 取消发送</div>
+        <div class="gallery-desc">红色渐变背景 + 红色声纹波形 + "松开手指，取消发送"红色按钮，上滑取消交互模式</div>
+        <span class="gallery-tag voice">语音交互</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/v4-首页1.7-关闭客服.jpg" alt="关闭客服">
+      <div class="gallery-info">
+        <div class="gallery-name">首页 · 通知状态</div>
+        <div class="gallery-desc">隐私政策更新通知横幅 + 完整业务网格视图，右下角悬浮在线客服入口</div>
+        <span class="gallery-tag">首页</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/广东10000号远程柜台-天翼手机销户01.jpg" alt="天翼手机销户">
+      <div class="gallery-info">
+        <div class="gallery-name">天翼手机销户 · 表单</div>
+        <div class="gallery-desc">5 项信息采集表单（号码/地市/身份证/姓名/联系电话），蓝色盾牌安全图标，红色警示提示</div>
+        <span class="gallery-tag form">业务表单</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/广东10000号远程柜台-补卡03.jpg" alt="补卡选择">
+      <div class="gallery-info">
+        <div class="gallery-name">补卡 · 业务选择</div>
+        <div class="gallery-desc">票券式卡片设计，双选入口：补换卡激活（紫粉渐变）+ 新开户激活（蓝青渐变）</div>
+        <span class="gallery-tag form">业务表单</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/广东10000号远程柜台-补换卡激活.jpg" alt="补换卡激活">
+      <div class="gallery-info">
+        <div class="gallery-name">补换卡激活 · 表单</div>
+        <div class="gallery-desc">4 项信息采集表单 + 3D 科技插图 + "新卡激活成功，原卡将立即失效"前置风险提示</div>
+        <span class="gallery-tag form">业务表单</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/remote-mini/广东10000号远程柜台-密码重置2.jpg" alt="密码重置">
+      <div class="gallery-info">
+        <div class="gallery-name">密码重置 · 办理须知</div>
+        <div class="gallery-desc">弹窗式办理须知，含四步流程指示器与三条注意事项（持身份证/光线充足/网络稳定）</div>
+        <span class="gallery-tag form">业务表单</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Icon System -->
+<div class="section">
+  <h2 class="section-title">业务图标系统</h2>
+  <p class="section-desc">21 个业务图标，采用 3D 玻璃拟态设计风格，按业务类别分为三大组：卡片业务(8)、账户管理(12)、其他(1)，色彩按功能语义编码。</p>
+
+  <div class="icon-category">
+    <div class="icon-category-title">🟡 卡片业务</div>
+    <div class="icon-category-desc">补卡、换卡、激活、组网等 SIM 卡相关业务</div>
+    <div class="icon-grid">
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.1-buka.jpg" alt="补卡"></div><div class="icon-label">补卡</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.2-huanka.jpg" alt="换卡"></div><div class="icon-label">换卡</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.3-jihuo.jpg" alt="补换卡激活"></div><div class="icon-label">补换卡激活</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.4-xinzhuang.jpg" alt="新装激活"></div><div class="icon-label">新装激活</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.5-zuwang.jpg" alt="成员卡组网"></div><div class="icon-label">成员卡组网</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.6-gaihao.jpg" alt="改号"></div><div class="icon-label">改号</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.7-guohu.jpg" alt="过户"></div><div class="icon-label">过户</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/2.8-mima.jpg" alt="客户密码重置"></div><div class="icon-label">密码重置</div></div>
+    </div>
+  </div>
+
+  <div class="icon-category">
+    <div class="icon-category-title">🟢 账户管理</div>
+    <div class="icon-category-desc">解挂/挂失、呼叫转移、余额支取、PUK 查询、销户等账户管理业务</div>
+    <div class="icon-grid">
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.1-jiegua.jpg" alt="解挂"></div><div class="icon-label">解挂</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.2-guashi.jpg" alt="挂失"></div><div class="icon-label">挂失</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.3-kthjzy.jpg" alt="开通呼叫转移"></div><div class="icon-label">开通呼叫转移</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.4-gbhjzy.jpg" alt="取消呼叫转移"></div><div class="icon-label">取消呼叫转移</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.5-cjyezq.jpg" alt="拆机余额支取"></div><div class="icon-label">拆机余额支取</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.6-puk.jpg" alt="PUK码查询"></div><div class="icon-label">PUK码查询</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.7-jdcx.jpg" alt="进度查询"></div><div class="icon-label">进度查询</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.8-zhuanchu.jpg" alt="携号转出"></div><div class="icon-label">携号转出</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.9-xiaohu.jpg" alt="移动销户"></div><div class="icon-label">移动销户</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.10-yzwh.jpg" alt="一证五号查询"></div><div class="icon-label">一证五号查询</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.11-fpct.jpg" alt="发票重推"></div><div class="icon-label">发票重推</div></div>
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/3.12-fptt.jpg" alt="修改发票抬头"></div><div class="icon-label">修改发票抬头</div></div>
+    </div>
+  </div>
+
+  <div class="icon-category">
+    <div class="icon-category-title">🔵 其他</div>
+    <div class="icon-category-desc">隐私政策等辅助功能入口</div>
+    <div class="icon-grid">
+      <div class="icon-item"><div class="icon-img"><img src="./assets/remote-mini/icons/4.1yszc.jpg" alt="隐私政策"></div><div class="icon-label">隐私政策</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Design Specs -->
+<div class="section">
+  <h2 class="section-title">设计规范</h2>
+  <p class="section-desc">基于中国电信品牌色系的蓝色主题设计体系，从 UI 截图中提炼的核心设计规范。</p>
+  <div class="design-grid">
+    <div>
+      <h3 style="font-size:18px;color:var(--ink);margin-bottom:20px;">色彩体系</h3>
+      <div class="color-palette">
+        <div class="color-item">
+          <div class="color-swatch" style="background:#4a90e2;"></div>
+          <div class="color-info"><div class="color-name">品牌蓝</div><div class="color-value">#4A90E2</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#7bb3f0;"></div>
+          <div class="color-info"><div class="color-name">浅蓝</div><div class="color-value">#7BB3F0</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#e8f4fc;"></div>
+          <div class="color-info"><div class="color-name">背景蓝</div><div class="color-value">#E8F4FC</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#ffffff;"></div>
+          <div class="color-info"><div class="color-name">卡片白</div><div class="color-value">#FFFFFF</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#ff6b9d;"></div>
+          <div class="color-info"><div class="color-name">标签粉</div><div class="color-value">#FF6B9D</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#52c41a;"></div>
+          <div class="color-info"><div class="color-name">功能绿</div><div class="color-value">#52C41A</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#faad14;"></div>
+          <div class="color-info"><div class="color-name">提醒黄</div><div class="color-value">#FAAD14</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#7b61ff;"></div>
+          <div class="color-info"><div class="color-name">语音紫</div><div class="color-value">#7B61FF</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:18px;color:var(--ink);margin-bottom:20px;">设计特征</h3>
+      <div class="design-feature">
+        <div class="design-feature-title">3D 玻璃拟态图标</div>
+        <div class="design-feature-desc">业务图标采用 3D 渲染 + 玻璃拟态风格，半透明材质 + 柔和光影 + 圆角处理，按业务类别色彩编码（粉=卡片、绿=安全、橙=提醒、紫=语音）。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">语音状态色彩编码</div>
+        <div class="design-feature-desc">语音交互三态色彩切换：待机=蓝色、录音中=紫色渐变、取消发送=红色渐变，通过色彩突变传达模式切换，符合用户直觉认知。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">票券式表单容器</div>
+        <div class="design-feature-desc">业务选择页采用票券形圆角切口卡片，隐喻"服务工单"概念；表单页采用统一圆角白底卡片输入框 + 左侧蓝色图标辅助识别。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">4×2 金刚区网格</div>
+        <div class="design-feature-desc">首页核心业务采用 4×2 网格布局（金刚区），每项含彩色图标 + 文字标签，触摸目标约 72×72px，适配中老年用户群体。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Service Categories -->
+<div class="section">
+  <h2 class="section-title">业务覆盖范围</h2>
+  <p class="section-desc">20+ 项电信业务，按使用频率分层组织：高频查询入口前置，特色业务居中，扩展业务下沉。</p>
+  <div class="service-grid">
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.1-buka.jpg" alt="补卡"></div><div class="service-name">补卡</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.2-huanka.jpg" alt="换卡"></div><div class="service-name">换卡</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.3-jihuo.jpg" alt="补换卡激活"></div><div class="service-name">补换卡激活</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.4-xinzhuang.jpg" alt="新装激活"></div><div class="service-name">新装激活</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.5-zuwang.jpg" alt="成员卡组网"></div><div class="service-name">成员卡组网</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.7-guohu.jpg" alt="过户"></div><div class="service-name">过户</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.6-gaihao.jpg" alt="改号"></div><div class="service-name">改号</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/2.8-mima.jpg" alt="密码重置"></div><div class="service-name">密码重置</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.1-jiegua.jpg" alt="解挂"></div><div class="service-name">解挂</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.2-guashi.jpg" alt="挂失"></div><div class="service-name">挂失</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.3-kthjzy.jpg" alt="开通呼叫转移"></div><div class="service-name">开通呼叫转移</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.4-gbhjzy.jpg" alt="取消呼叫转移"></div><div class="service-name">取消呼叫转移</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.5-cjyezq.jpg" alt="拆机余额支取"></div><div class="service-name">拆机余额支取</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.6-puk.jpg" alt="PUK码查询"></div><div class="service-name">PUK码查询</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.7-jdcx.jpg" alt="进度查询"></div><div class="service-name">进度查询</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.8-zhuanchu.jpg" alt="携号转出"></div><div class="service-name">携号转出</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.9-xiaohu.jpg" alt="移动销户"></div><div class="service-name">移动销户</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.10-yzwh.jpg" alt="一证五号查询"></div><div class="service-name">一证五号查询</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.11-fpct.jpg" alt="发票重推"></div><div class="service-name">发票重推</div></div>
+    <div class="service-card"><div class="service-icon"><img src="./assets/remote-mini/icons/3.12-fptt.jpg" alt="修改发票抬头"></div><div class="service-name">修改发票抬头</div></div>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="section">
+  <h2 class="section-title">核心功能</h2>
+  <p class="section-desc">语音交互 + 表单流程 + 实名认证三位一体的远程柜台服务能力。</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-mic.jpg" alt="语音交互服务"></div>
+      <div class="feature-title">语音交互服务</div>
+      <div class="feature-desc">长按录音 + 上滑取消的双模式交互，点阵波形实时反馈录音状态，蓝→紫→红三态色彩切换，快捷指令降低用户"不知道说什么"的决策负担。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-form.jpg" alt="标准化表单流程"></div>
+      <div class="feature-title">标准化表单流程</div>
+      <div class="feature-desc">统一圆角卡片输入框 + 左侧图标辅助识别，5 项核心信息采集（号码/地市/身份证/姓名/联系电话），协议勾选 + 红色风险前置提示。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-idcard.jpg" alt="实名认证体系"></div>
+      <div class="feature-title">实名认证体系</div>
+      <div class="feature-desc">四步标准化流程（信息填写→证件+视频认证→审核→受理），办理须知弹窗前置告知要求（持身份证/光线充足/网络稳定），合规优先。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-palette.jpg" alt="3D图标系统"></div>
+      <div class="feature-title">3D 图标系统</div>
+      <div class="feature-desc">21 个业务图标采用 3D 玻璃拟态风格，按功能语义色彩编码，半透明材质 + 柔和光影，在扁平化界面中形成视觉锚点。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-layers.jpg" alt="分层信息架构"></div>
+      <div class="feature-title">分层信息架构</div>
+      <div class="feature-desc">首页三层业务分级：高频查询（查费/查流量/充话费）→ 特色业务（补卡/过户/改号）→ 扩展业务（销户/发票/PUK），降低认知负荷。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><img src="./assets/remote-mini/icons/custom-headset.jpg" alt="在线客服入口"></div>
+      <div class="feature-title">在线客服入口</div>
+      <div class="feature-desc">右下角悬浮在线客服入口，客服形象 + 品牌背书，降低用户对远程服务的警惕感，提供人工兜底通道。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-text">广东10000号远程柜台小程序 · WeChat Mini Program</p>
+</footer>
+
+</body>
+</html>

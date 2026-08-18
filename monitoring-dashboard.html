@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一体化监控看板 · 10000号一体化监控全国视图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0e1a;
+  --bg2: #0d1b2a;
+  --bg3: #111827;
+  --surface: rgba(15,23,42,0.8);
+  --surface2: rgba(15,23,42,0.5);
+  --ink: #ffffff;
+  --ink-2: #e2e8f0;
+  --muted: #94a3b8;
+  --muted-2: #64748b;
+  --rule: rgba(255,255,255,0.06);
+  --cyan: #00d4ff;
+  --blue: #3b82f6;
+  --green: #10b981;
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+body {
+  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--ink-2);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Nav Bar ===== */
+.nav-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(16, 24, 40, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-container {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+}
+.nav-logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700; font-size: 20px; color: #fff;
+  letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .logo-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 12px var(--accent);
+}
+.nav-tabs { display: flex; gap: 4px; list-style: none; }
+.nav-tab {
+  padding: 8px 16px; font-size: 14px; color: rgba(255,255,255,0.6);
+  cursor: pointer; border-radius: 8px;
+  transition: all 0.25s ease; white-space: nowrap; font-weight: 400;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.nav-tab.active { color: #fff; background: var(--accent); font-weight: 600; }
+@media (max-width: 1100px) {
+  .nav-tabs { overflow-x: auto; }
+  .nav-tab { padding: 6px 10px; font-size: 13px; }
+}
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  padding: 100px 40px 80px;
+  background: radial-gradient(ellipse at 30% 20%, rgba(0,212,255,0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(59,130,246,0.06) 0%, transparent 50%),
+              var(--bg);
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image: 
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.hero-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.hero-tag {
+  display: inline-block; padding: 6px 16px; border-radius: 999px;
+  background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3);
+  font-size: 13px; color: var(--cyan); margin-bottom: 24px;
+}
+.hero-title {
+  font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+  font-size: 48px; font-weight: 700; color: var(--ink); margin-bottom: 20px;
+  letter-spacing: -0.5px; line-height: 1.2;
+}
+.hero-desc {
+  font-size: 17px; line-height: 1.8; color: var(--muted); max-width: 760px; margin-bottom: 40px;
+}
+.hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; gap: 4px; }
+.hero-stat-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 32px; font-weight: 700; color: var(--cyan); }
+.hero-stat-label { font-size: 13px; color: var(--muted-2); }
+
+/* ===== KPI ===== */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+  max-width: 1200px; margin: -48px auto 0; padding: 0 40px;
+  position: relative; z-index: 2;
+}
+.kpi-card {
+  background: var(--surface); backdrop-filter: blur(10px);
+  border: 1px solid rgba(0,212,255,0.15); border-radius: var(--radius-lg);
+  padding: 28px; transition: all 0.3s ease;
+}
+.kpi-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,212,255,0.08); }
+.kpi-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  margin-bottom: 20px;
+}
+.kpi-icon.blue { background: rgba(0,212,255,0.15); }
+.kpi-icon.green { background: rgba(16,185,129,0.15); }
+.kpi-icon.red { background: rgba(239,68,68,0.15); }
+.kpi-icon.cyan { background: rgba(14,165,233,0.15); }
+.kpi-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 32px; font-weight: 700; color: var(--ink); }
+.kpi-label { font-size: 14px; color: var(--muted-2); margin-top: 4px; }
+
+/* ===== Section ===== */
+.section { max-width: 1200px; margin: 0 auto; padding: 80px 40px; }
+.section-title {
+  font-family: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+  font-size: 32px; font-weight: 600; color: var(--ink); margin-bottom: 12px;
+}
+.section-desc { font-size: 16px; color: var(--muted-2); margin-bottom: 48px; line-height: 1.7; }
+
+/* ===== Gallery ===== */
+.gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.gallery-item {
+  background: var(--surface2); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); overflow: hidden; transition: all 0.3s ease;
+}
+.gallery-item:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+.gallery-img {
+  width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block;
+  border-bottom: 1px solid var(--rule);
+  transition: transform 0.3s ease;
+}
+.gallery-item:hover .gallery-img { transform: scale(1.02); }
+.gallery-info { padding: 20px 24px; }
+.gallery-name { font-size: 16px; font-weight: 600; color: var(--ink-2); }
+.gallery-desc { font-size: 13px; color: var(--muted-2); margin-top: 6px; line-height: 1.6; }
+.gallery-tag {
+  display: inline-block; padding: 3px 12px; border-radius: 8px;
+  font-size: 11px; margin-top: 10px;
+  background: rgba(0,212,255,0.1); color: var(--cyan);
+}
+
+/* ===== Design System ===== */
+.design-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.color-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.color-item {
+  border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--rule);
+}
+.color-swatch { height: 72px; }
+.color-info { padding: 10px 14px; background: var(--surface); }
+.color-name { font-size: 12px; color: var(--muted); }
+.color-value { font-size: 11px; color: var(--muted-2); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+.design-feature {
+  padding: 20px; background: var(--surface2); border-radius: var(--radius-md);
+  border: 1px solid var(--rule); margin-bottom: 16px;
+}
+.design-feature-title { font-size: 15px; color: var(--cyan); margin-bottom: 8px; font-weight: 500; }
+.design-feature-desc { font-size: 13px; color: var(--muted-2); line-height: 1.7; }
+
+/* ===== Features ===== */
+.feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.feature-card {
+  background: var(--surface2); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); padding: 32px;
+  transition: all 0.3s ease;
+}
+.feature-card:hover { border-color: rgba(0,212,255,0.2); background: rgba(15,23,42,0.6); }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; font-size: 26px;
+  background: rgba(0,212,255,0.1); margin-bottom: 20px;
+}
+.feature-title { font-size: 17px; font-weight: 600; color: var(--ink-2); margin-bottom: 10px; }
+.feature-desc { font-size: 14px; line-height: 1.8; color: var(--muted-2); }
+
+/* ===== Architecture ===== */
+.arch-flow {
+  display: flex; flex-direction: column; gap: 20px;
+}
+.arch-layer {
+  display: flex; gap: 16px; align-items: stretch;
+}
+.arch-layer-label {
+  flex-shrink: 0; width: 120px; display: flex; align-items: center;
+  font-size: 13px; font-weight: 600; color: var(--cyan);
+}
+.arch-layer-content { flex: 1; display: flex; gap: 12px; flex-wrap: wrap; }
+.arch-module {
+  padding: 12px 20px; background: var(--surface2); border: 1px solid var(--rule);
+  border-radius: var(--radius-md); font-size: 13px; color: var(--muted);
+  flex: 1; min-width: 140px; text-align: center;
+}
+.arch-module.highlight { border-color: rgba(0,212,255,0.3); color: var(--cyan); }
+
+/* ===== Footer ===== */
+.footer {
+  border-top: 1px solid var(--rule);
+  padding: 40px; text-align: center;
+}
+.footer-text { font-size: 13px; color: var(--muted-2); }
+.footer-link { color: var(--cyan); text-decoration: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 968px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .gallery { grid-template-columns: 1fr; }
+  .design-grid { grid-template-columns: 1fr; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 34px; }
+  .section { padding: 56px 24px; }
+  .hero { padding: 70px 24px 50px; }
+  .kpi-grid { padding: 0 24px; }
+  .header { padding: 14px 24px; }
+  .arch-layer-label { width: 80px; font-size: 12px; }
+}
+
+.tab-content { display: block; padding-top: 64px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<!-- ===== Navigation ===== -->
+<nav class="nav-bar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <span class="logo-dot"></span>
+      <span>Portfolio</span>
+    </div>
+    <ul class="nav-tabs">
+      <li class="nav-tab"><a href="./home.html" style="text-decoration:none;color:inherit;">个人简介</a></li>
+      <li class="nav-tab"><a href="./online-cs-app.html" style="text-decoration:none;color:inherit;">在线客服 APP</a></li>
+      <li class="nav-tab"><a href="./remote-mini.html" style="text-decoration:none;color:inherit;">远程柜台小程序</a></li>
+      <li class="nav-tab"><a href="./intensive-portal.html" style="text-decoration:none;color:inherit;">集约门户</a></li>
+      <li class="nav-tab active">一体化监控看板</li>
+      <li class="nav-tab"><a href="./im-client.html" style="text-decoration:none;color:inherit;">IM 客户端</a></li>
+      <li class="nav-tab"><a href="./remote-counter.html" style="text-decoration:none;color:inherit;">远程柜台客服</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">Enterprise Data Visualization Dashboard</span>
+    <h1 class="hero-title">10000号一体化监控全国视图</h1>
+    <p class="hero-desc">面向中国电信 10000 号客服系统的一体化监控大屏，采用深色科技风格设计，融合数据可视化、地理信息映射、实时告警监控与网络拓扑展示。覆盖资源利用、可用性探测、话务分布、坐席状态等 12 个核心监控维度，7×24 小时全天候保障客服系统稳定运行。</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-value">12</span><span class="hero-stat-label">监控维度</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">55,234</span><span class="hero-stat-label">监控主机数</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">6</span><span class="hero-stat-label">大区覆盖</span></div>
+      <div class="hero-stat"><span class="hero-stat-value">7×24</span><span class="hero-stat-label">实时监控</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-icon blue">🖥️</div>
+    <div class="kpi-value">55,234</div>
+    <div class="kpi-label">主机总数</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon green">✅</div>
+    <div class="kpi-value">1,234</div>
+    <div class="kpi-label">正常主机数</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon red">⚠️</div>
+    <div class="kpi-value">12</div>
+    <div class="kpi-label">告警主机数</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon cyan">📞</div>
+    <div class="kpi-value">89%</div>
+    <div class="kpi-label">IVR 接口可用率</div>
+  </div>
+</div>
+
+<!-- UI Gallery -->
+<div class="section">
+  <h2 class="section-title">UI 页面设计</h2>
+  <p class="section-desc">12 个核心监控视图，覆盖资源利用、话务统计、坐席管理、网络拓扑等全链路监控场景。采用三栏式大屏布局，中央地图可视化为核心视觉焦点，左侧告警与拓扑信息，右侧数据排名与多维度切换。</p>
+  <div class="gallery">
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/1-资源利用统计.jpg" alt="资源利用统计">
+      <div class="gallery-info">
+        <div class="gallery-name">资源利用统计</div>
+        <div class="gallery-desc">全国节点 CPU / 内存利用率排名，Top 21 节点资源监控，前三名金银铜奖牌标识</div>
+        <span class="gallery-tag">资源监控</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/2-可用性探测.jpg" alt="可用性探测">
+      <div class="gallery-info">
+        <div class="gallery-name">可用性探测</div>
+        <div class="gallery-desc">各节点服务可用性实时探测，自动标注异常节点与不可达服务</div>
+        <span class="gallery-tag">健康检查</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/3-呼入数.jpg" alt="呼入数">
+      <div class="gallery-info">
+        <div class="gallery-name">呼入数</div>
+        <div class="gallery-desc">全国各省呼入话务量统计与排名，实时反映话务热点区域</div>
+        <span class="gallery-tag">话务统计</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/4-实时接入数.jpg" alt="实时接入数">
+      <div class="gallery-info">
+        <div class="gallery-name">实时接入数</div>
+        <div class="gallery-desc">当前实时接入用户数，按省份节点分布展示，秒级刷新</div>
+        <span class="gallery-tag">实时监控</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/5-24小时接通率.jpg" alt="24小时接通率">
+      <div class="gallery-info">
+        <div class="gallery-name">24 小时接通率</div>
+        <div class="gallery-desc">近 24 小时通话接通率趋势与节点排名，衡量整体服务质量</div>
+        <span class="gallery-tag">服务质量</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/6-15秒接通率.jpg" alt="15秒接通率">
+      <div class="gallery-info">
+        <div class="gallery-name">15 秒接通率</div>
+        <div class="gallery-desc">15 秒内接通率统计，衡量响应速度的核心 SLA 指标</div>
+        <span class="gallery-tag">服务质量</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/7-排队人数.jpg" alt="排队人数">
+      <div class="gallery-info">
+        <div class="gallery-name">排队人数</div>
+        <div class="gallery-desc">实时排队等候用户数，超阈值自动触发告警</div>
+        <span class="gallery-tag">实时监控</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/8-实时签入坐席.jpg" alt="实时签入坐席">
+      <div class="gallery-info">
+        <div class="gallery-name">实时签入坐席</div>
+        <div class="gallery-desc">当前签入坐席数统计，按省份节点排名展示</div>
+        <span class="gallery-tag">坐席管理</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/9-话务节点分布情况.jpg" alt="话务节点分布情况">
+      <div class="gallery-info">
+        <div class="gallery-name">话务节点分布</div>
+        <div class="gallery-desc">各省话务节点呼入分布，三级钻取展示省份→节点→话务量</div>
+        <span class="gallery-tag">话务分布</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/10-坐席注册节点.jpg" alt="坐席注册节点">
+      <div class="gallery-info">
+        <div class="gallery-name">坐席注册节点</div>
+        <div class="gallery-desc">坐席注册节点分布统计，监控坐席注册状态与在线情况</div>
+        <span class="gallery-tag">坐席管理</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/11-滑动效果-滚动条效果.jpg" alt="滚动条交互效果">
+      <div class="gallery-info">
+        <div class="gallery-name">滚动条交互效果</div>
+        <div class="gallery-desc">数据列表滚动加载效果，支持平滑滚动与惯性滑动</div>
+        <span class="gallery-tag">交互设计</span>
+      </div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="./assets/monitoring/12-展开更多.jpg" alt="展开更多">
+      <div class="gallery-info">
+        <div class="gallery-name">展开更多</div>
+        <div class="gallery-desc">Hover 下拉菜单展开 7 个监控维度，支持快速切换视图</div>
+        <span class="gallery-tag">交互设计</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Architecture -->
+<div class="section">
+  <h2 class="section-title">系统架构</h2>
+  <p class="section-desc">采用分层架构设计，从数据采集到可视化展示，构建完整的一体化监控体系。</p>
+  <div class="arch-flow">
+    <div class="arch-layer">
+      <div class="arch-layer-label">数据采集层</div>
+      <div class="arch-layer-content">
+        <div class="arch-module">主机性能采集</div>
+        <div class="arch-module">话务数据采集</div>
+        <div class="arch-module">坐席状态采集</div>
+        <div class="arch-module">网络链路探测</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">数据处理层</div>
+      <div class="arch-layer-content">
+        <div class="arch-module">实时流处理</div>
+        <div class="arch-module">告警规则引擎</div>
+        <div class="arch-module">数据聚合</div>
+        <div class="arch-module">时序数据存储</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">可视化层</div>
+      <div class="arch-layer-content">
+        <div class="arch-module highlight">全国地图</div>
+        <div class="arch-module highlight">KPI 仪表盘</div>
+        <div class="arch-module highlight">排名表格</div>
+        <div class="arch-module highlight">网络拓扑图</div>
+        <div class="arch-module highlight">告警瀑布流</div>
+      </div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">交互层</div>
+      <div class="arch-layer-content">
+        <div class="arch-module">Hover 下拉切换</div>
+        <div class="arch-module">滚动加载</div>
+        <div class="arch-module">三级钻取</div>
+        <div class="arch-module">实时刷新</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Design System -->
+<div class="section">
+  <h2 class="section-title">设计规范</h2>
+  <p class="section-desc">深色科技风格设计体系，采用高对比度霓虹光效与玻璃拟态（Glassmorphism），适合 7×24 小时监控大屏场景。所有色彩遵循语义化原则，确保运维人员快速识别状态。</p>
+  <div class="design-grid">
+    <div>
+      <h3 style="font-size:18px;color:var(--ink-2);margin-bottom:20px;">色彩体系</h3>
+      <div class="color-palette">
+        <div class="color-item">
+          <div class="color-swatch" style="background:#0a0e1a;"></div>
+          <div class="color-info"><div class="color-name">背景底色</div><div class="color-value">#0A0E1A</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#00d4ff;"></div>
+          <div class="color-info"><div class="color-name">科技蓝</div><div class="color-value">#00D4FF</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#3b82f6;"></div>
+          <div class="color-info"><div class="color-name">电光蓝</div><div class="color-value">#3B82F6</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#ef4444;"></div>
+          <div class="color-info"><div class="color-name">告警红</div><div class="color-value">#EF4444</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#f59e0b;"></div>
+          <div class="color-info"><div class="color-name">预警黄</div><div class="color-value">#F59E0B</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#10b981;"></div>
+          <div class="color-info"><div class="color-name">正常绿</div><div class="color-value">#10B981</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#ffffff;"></div>
+          <div class="color-info"><div class="color-name">文字主色</div><div class="color-value">#FFFFFF</div></div>
+        </div>
+        <div class="color-item">
+          <div class="color-swatch" style="background:#64748b;"></div>
+          <div class="color-info"><div class="color-name">文字辅色</div><div class="color-value">#64748B</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:18px;color:var(--ink-2);margin-bottom:20px;">设计特征</h3>
+      <div class="design-feature">
+        <div class="design-feature-title">玻璃拟态 Glassmorphism</div>
+        <div class="design-feature-desc">面板采用轻微透明度与背景模糊（backdrop-filter: blur），营造层次感与空间纵深感，使信息卡片悬浮于深色背景之上。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">霓虹光效 Neon Glow</div>
+        <div class="design-feature-desc">关键数据元素带外发光效果（box-shadow），强化视觉焦点与科技氛围，突出告警状态与核心指标。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">三栏式大屏布局</div>
+        <div class="design-feature-desc">左栏告警与拓扑 · 中央地图可视化 · 右栏数据排名，信息层级清晰，符合监控大屏"中心辐射"阅读模式。</div>
+      </div>
+      <div class="design-feature">
+        <div class="design-feature-title">语义化色彩</div>
+        <div class="design-feature-desc">红=故障 / 黄=预警 / 蓝=正常 / 灰=无数据，符合国际通用监控标准，降低认知负荷。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="section">
+  <h2 class="section-title">核心功能</h2>
+  <p class="section-desc">覆盖基础设施监控、话务运营、坐席管理、网络拓扑四大领域，构建全方位一体化监控体系。</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🗺️</div>
+      <div class="feature-title">全国地图可视化</div>
+      <div class="feature-desc">以中国地图为核心视觉，实时展示全国 6 大区节点分布、告警状态与网络链路拓扑，支持节点雷达波纹动画与动态连线。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">12 维度数据监控</div>
+      <div class="feature-desc">资源利用、可用性探测、呼入数、接通率、排队人数、签入坐席、话务分布等 12 个监控维度，Hover 下拉快速切换。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🚨</div>
+      <div class="feature-title">实时告警系统</div>
+      <div class="feature-desc">严重 / 重要分级告警，环形进度指示，时间序列告警瀑布流，地图红色标记联动，双通道警示机制。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-title">网络链路拓扑</div>
+      <div class="feature-desc">树状/桑基图展示大区-省份-节点三级网络链路关系，流动光效表示数据流向，绿/蓝色节点区分状态。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📈</div>
+      <div class="feature-title">资源利用率排名</div>
+      <div class="feature-desc">CPU / 内存利用率 Top 21 节点排名，前三名金银铜奖牌标识，高负载节点红色/橙色高亮预警。</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">坐席与话务管理</div>
+      <div class="feature-desc">实时签入坐席数、话务节点分布、坐席注册节点监控，省份→节点→话务量三级钻取分析。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p class="footer-text">一体化监控看板 · 10000号一体化监控全国视图</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人简介 | 沈阳波 · UI Designer</title>
+<style>
+@font-face {
+  font-family: 'BricolageGrotesque';
+  src: url('./_shared/fonts/BricolageGrotesque-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'BricolageGrotesque';
+  src: url('./_shared/fonts/BricolageGrotesque-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'WorkSans';
+  src: url('./_shared/fonts/WorkSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'WorkSans';
+  src: url('./_shared/fonts/WorkSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DMMono';
+  src: url('./_shared/fonts/DMMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-dark: #101828;
+  --bg2: #f5f8ff;
+  --bg3: #eaf0fa;
+  --ink: #101828;
+  --ink-regular: #26364d;
+  --muted: #667085;
+  --muted-2: #98a2b3;
+  --rule: #e2ecff;
+  --accent: #0068ff;
+  --accent-dark: #0057e6;
+  --accent-light: #e2ecff;
+  --accent-lighter: #f5f8ff;
+  --accent2: #7b61ff;
+  --gold: #d3811c;
+  --gold-light: #fff8f1;
+  --success: #0bb078;
+  --warn: #f59e0b;
+  --error: #e11d48;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.14);
+  --gradient-primary: linear-gradient(135deg, #0068ff 0%, #4f8dff 50%, #7b61ff 100%);
+  --gradient-ai: linear-gradient(135deg, #6a8eff 0%, #a78bfa 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'WorkSans', 'PingFang SC', -apple-system, 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ===== Navigation ===== */
+.nav-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(16, 24, 40, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.nav-container {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 64px;
+}
+.nav-logo {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-weight: 700; font-size: 20px; color: #fff;
+  letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px;
+}
+.nav-logo .logo-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 12px var(--accent);
+}
+.nav-tabs { display: flex; gap: 4px; list-style: none; }
+.nav-tab {
+  padding: 8px 16px; font-size: 14px; color: rgba(255,255,255,0.6);
+  cursor: pointer; border-radius: var(--radius-sm);
+  transition: all 0.25s ease; white-space: nowrap; font-weight: 400;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.nav-tab.active { color: #fff; background: var(--accent); font-weight: 600; }
+
+/* ===== Hero ===== */
+.hero {
+  position: relative; min-height: 600px;
+  background: var(--bg-dark); overflow: hidden;
+  display: flex; align-items: center;
+  padding-top: 64px;
+}
+.hero-bg {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(0,104,255,0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(123,97,255,0.12) 0%, transparent 50%);
+}
+.hero-grid {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 1280px; margin: 0 auto;
+  padding: 80px 32px; width: 100%;
+  display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: center;
+}
+.hero-text { max-width: 640px; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 14px;
+  background: rgba(0, 104, 255, 0.15);
+  border: 1px solid rgba(0, 104, 255, 0.3);
+  border-radius: 20px; font-size: 13px; color: var(--accent);
+  margin-bottom: 24px; letter-spacing: 0.02em;
+}
+.hero-tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.hero-name {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-size: 56px; font-weight: 700; color: #fff;
+  line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 12px;
+}
+.hero-name-en {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.4);
+  letter-spacing: 0.04em; margin-bottom: 24px;
+}
+.hero-role {
+  font-size: 20px; color: var(--accent); font-weight: 500; margin-bottom: 20px;
+}
+.hero-desc {
+  font-size: 17px; color: rgba(255,255,255,0.65);
+  line-height: 1.8; margin-bottom: 36px;
+}
+.hero-meta { display: flex; flex-wrap: wrap; gap: 24px; margin-bottom: 36px; }
+.hero-meta-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: rgba(255,255,255,0.5);
+}
+.hero-meta-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.hero-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+.hero-stat { display: flex; flex-direction: column; }
+.hero-stat-num {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-size: 40px; font-weight: 700; color: var(--accent); line-height: 1;
+}
+.hero-stat-num .plus { font-size: 24px; opacity: 0.6; }
+.hero-stat-label { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 8px; }
+
+/* Q Avatar */
+.hero-avatar {
+  width: 280px; height: 280px; border-radius: 50%;
+  overflow: hidden; position: relative;
+  border: 4px solid rgba(0,104,255,0.3);
+  box-shadow: 0 0 80px rgba(0,104,255,0.2), 0 16px 48px rgba(0,0,0,0.3);
+}
+.hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.hero-avatar::after {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .hero-content { grid-template-columns: 1fr; text-align: center; }
+  .hero-avatar { margin: 0 auto; width: 200px; height: 200px; }
+  .hero-meta, .hero-stats { justify-content: center; }
+  .hero-name { font-size: 40px; }
+}
+
+/* ===== Sections ===== */
+.section { max-width: 1280px; margin: 0 auto; padding: 96px 32px; }
+.section-label {
+  display: inline-block; font-family: 'DMMono', monospace;
+  font-size: 13px; color: var(--accent);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'PingFang SC', sans-serif;
+  font-size: 40px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.2;
+}
+.section-desc {
+  font-size: 17px; color: var(--muted); max-width: 680px; line-height: 1.7; margin-bottom: 48px;
+}
+
+/* ===== About / Self Evaluation ===== */
+.about-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+}
+.about-card {
+  background: var(--bg); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); padding: 32px;
+  transition: all 0.3s ease;
+}
+.about-card:hover {
+  border-color: rgba(0,104,255,0.3);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.about-card-icon {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 16px;
+}
+.about-card-icon.blue { background: var(--accent-light); }
+.about-card-icon.purple { background: #f0ecff; }
+.about-card-icon.green { background: #e6f9f0; }
+.about-card-icon.gold { background: var(--gold-light); }
+.about-card h3 { font-size: 17px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.about-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+@media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+
+/* ===== Skills ===== */
+.skill-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
+}
+.skill-category h3 {
+  font-size: 16px; font-weight: 600; color: var(--ink);
+  margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+}
+.skill-category h3::before {
+  content: ''; width: 4px; height: 16px; border-radius: 2px;
+  background: var(--accent);
+}
+.skill-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.skill-tag {
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 500;
+  border: 1px solid var(--rule); background: var(--bg);
+  color: var(--ink-regular); transition: all 0.2s ease;
+}
+.skill-tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-lighter); }
+.skill-tag.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.skill-tag.ai {
+  background: var(--gradient-ai); color: #fff; border: none;
+}
+
+@media (max-width: 768px) { .skill-grid { grid-template-columns: 1fr; } }
+
+/* ===== Timeline ===== */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px;
+  width: 2px; background: var(--rule);
+}
+.timeline-item { position: relative; margin-bottom: 48px; }
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-dot {
+  position: absolute; left: -32px; top: 4px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--bg); border: 3px solid var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-lighter);
+}
+.timeline-item:nth-child(2) .timeline-dot { border-color: var(--accent2); box-shadow: 0 0 0 4px #f0ecff; }
+.timeline-item:nth-child(3) .timeline-dot { border-color: var(--gold); box-shadow: 0 0 0 4px var(--gold-light); }
+.timeline-header {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;
+}
+.timeline-company { font-size: 18px; font-weight: 600; color: var(--ink); }
+.timeline-period {
+  font-family: 'DMMono', monospace; font-size: 13px;
+  color: var(--muted-2); padding: 2px 10px;
+  background: var(--bg2); border-radius: var(--radius-sm);
+}
+.timeline-role { font-size: 14px; color: var(--accent); font-weight: 500; margin-bottom: 12px; }
+.timeline-meta {
+  display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;
+  font-size: 13px; color: var(--muted-2);
+}
+.timeline-meta span { display: flex; align-items: center; gap: 4px; }
+.timeline-desc {
+  font-size: 14px; color: var(--muted); line-height: 1.8;
+  padding: 16px 20px; background: var(--bg2);
+  border-radius: var(--radius-md); border-left: 3px solid var(--accent);
+}
+.timeline-item:nth-child(2) .timeline-desc { border-left-color: var(--accent2); }
+.timeline-item:nth-child(3) .timeline-desc { border-left-color: var(--gold); }
+.timeline-desc ul { list-style: none; }
+.timeline-desc li { padding: 3px 0; padding-left: 16px; position: relative; }
+.timeline-desc li::before {
+  content: ''; position: absolute; left: 0; top: 12px;
+  width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+}
+.timeline-item:nth-child(2) .timeline-desc li::before { background: var(--accent2); }
+.timeline-item:nth-child(3) .timeline-desc li::before { background: var(--gold); }
+
+/* ===== Projects Summary ===== */
+.projects-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.project-card {
+  background: var(--bg); border: 1px solid var(--rule);
+  border-radius: var(--radius-lg); padding: 0;
+  transition: all 0.3s ease; cursor: pointer;
+  display: flex; flex-direction: column; gap: 0;
+  overflow: hidden;
+}
+.project-card-img {
+  width: 100%; height: 140px; object-fit: cover;
+  border-bottom: 1px solid var(--rule);
+}
+.project-card-body {
+  padding: 24px 28px 28px;
+  display: flex; flex-direction: column; gap: 12px; flex: 1;
+}
+.project-card:hover {
+  border-color: rgba(0,104,255,0.3);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+.project-card:hover .project-card-img { transform: scale(1.03); }
+.project-card-img { transition: transform 0.4s ease; }
+.project-card-tag {
+  font-family: 'DMMono', monospace; font-size: 12px;
+  color: var(--accent); letter-spacing: 0.05em;
+}
+.project-card h3 { font-size: 18px; font-weight: 600; color: var(--ink); }
+.project-card p { font-size: 14px; color: var(--muted); line-height: 1.7; flex: 1; }
+.project-card-link {
+  font-size: 13px; color: var(--accent); font-weight: 500;
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+}
+.project-card-link svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.project-card:hover .project-card-link svg { transform: translateX(4px); }
+
+@media (max-width: 968px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .projects-grid { grid-template-columns: 1fr; } }
+
+/* ===== Contact ===== */
+.contact-bar {
+  background: var(--bg-dark); padding: 64px 32px;
+  display: flex; justify-content: center;
+}
+.contact-inner {
+  max-width: 1280px; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 32px;
+}
+.contact-info { display: flex; flex-wrap: wrap; gap: 32px; }
+.contact-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 15px; color: rgba(255,255,255,0.7);
+}
+.contact-item svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; }
+.contact-item a:hover { color: #fff; }
+.contact-cta {
+  font-family: 'BricolageGrotesque', sans-serif;
+  font-size: 24px; font-weight: 700; color: #fff;
+}
+
+@media (max-width: 768px) {
+  .contact-inner { flex-direction: column; text-align: center; }
+  .contact-info { justify-content: center; }
+}
+
+/* ===== Footer ===== */
+.footer {
+  background: var(--bg-dark); border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 32px; text-align: center;
+  font-size: 13px; color: rgba(255,255,255,0.3);
+}
+
+.tab-content { display: block; padding-top: 64px; }
+</style>
+</head>
+<body>
+
+<!-- ===== Navigation ===== -->
+<nav class="nav-bar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <span class="logo-dot"></span>
+      <span>Portfolio</span>
+    </div>
+    <ul class="nav-tabs">
+      <li class="nav-tab active">个人简介</li>
+      <li class="nav-tab"><a href="./online-cs-app.html" style="text-decoration:none;color:inherit;">在线客服 APP</a></li>
+      <li class="nav-tab"><a href="./remote-mini.html" style="text-decoration:none;color:inherit;">远程柜台小程序</a></li>
+      <li class="nav-tab"><a href="./intensive-portal.html" style="text-decoration:none;color:inherit;">集约门户</a></li>
+      <li class="nav-tab"><a href="./monitoring-dashboard.html" style="text-decoration:none;color:inherit;">一体化监控看板</a></li>
+      <li class="nav-tab"><a href="./im-client.html" style="text-decoration:none;color:inherit;">IM 客户端</a></li>
+      <li class="nav-tab"><a href="./remote-counter.html" style="text-decoration:none;color:inherit;">远程柜台客服</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="hero-tag"><span class="dot"></span>UI Designer & Frontend Developer</span>
+      <h1 class="hero-name">沈阳波</h1>
+      <div class="hero-name-en">SHEN YANGBO</div>
+      <div class="hero-role">UI 设计师 / 前端开发工程师</div>
+      <p class="hero-desc">
+        多年 UI 设计与前端开发经验，擅长从视觉设计到页面落地的全链路交付。精通 Figma、Photoshop、Illustrator 等设计工具，同时掌握 HTML、CSS、Vue 等前端技术，致力于将设计稿高还原度地转化为优质用户体验。
+      </p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          现居深圳
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          1991年04月
+        </div>
+        <div class="hero-meta-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          浙江工业大学 · 工业设计
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">10<span class="plus">+</span></div>
+          <div class="hero-stat-label">年设计与开发经验</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">6</div>
+          <div class="hero-stat-label">核心项目</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">2</div>
+          <div class="hero-stat-label">核心技能（设计+开发）</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-avatar">
+      <img src="./assets/about/q-avatar.jpg" alt="沈阳波 Q版头像">
+    </div>
+  </div>
+</section>
+
+<!-- ===== Self Evaluation ===== -->
+<section class="section">
+  <div class="section-label">01 — About Me</div>
+  <h2 class="section-title">自我评价</h2>
+  <p class="section-desc">兼具设计审美与工程能力的复合型 UI 设计师，善于用 AI 工具赋能设计流程。</p>
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="about-card-icon blue">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0068ff" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>扎实的设计功底</h3>
+      <p>多年 UI 设计经验，具备扎实的创新意识和美术功底，拥有良好的沟通能力和项目协调能力。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon purple">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7b61ff" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <h3>全栈前端能力</h3>
+      <p>多年小程序、H5 页面设计和开发经验，掌握 HTML、CSS、jQuery、Vue 等前端开发语言。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon green">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0bb078" stroke-width="2"><path d="M14 9l-9 9-3-3 9-9"/><path d="M20 4l-6 6"/><path d="M14 4h6v6"/></svg>
+      </div>
+      <h3>AI 赋能设计</h3>
+      <p>熟练运用 AI 辅助设计工具，将 AI 生图、智能排版与创意探索融入设计流程，显著提升设计效率与产出质量。</p>
+    </div>
+    <div class="about-card">
+      <div class="about-card-icon gold">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d3811c" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+      </div>
+      <h3>设计工具精通</h3>
+      <p>熟练使用 Photoshop、Illustrator、Figma、Axure 等主流设计软件，覆盖从交互原型到视觉稿的全流程。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Skills ===== -->
+<section class="section" style="background: var(--bg2);">
+  <div class="section-label">02 — Skills</div>
+  <h2 class="section-title">技能栈</h2>
+  <p class="section-desc">设计工具与前端开发双线并进，覆盖从设计到落地的完整链路。</p>
+  <div class="skill-grid">
+    <div class="skill-category">
+      <h3>设计工具</h3>
+      <div class="skill-tags">
+        <span class="skill-tag primary">Figma</span>
+        <span class="skill-tag primary">Photoshop</span>
+        <span class="skill-tag primary">Illustrator</span>
+        <span class="skill-tag primary">Axure</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <h3>前端开发</h3>
+      <div class="skill-tags">
+        <span class="skill-tag primary">HTML5</span>
+        <span class="skill-tag primary">CSS3</span>
+        <span class="skill-tag primary">jQuery</span>
+        <span class="skill-tag primary">JavaScript</span>
+        <span class="skill-tag ">Vue</span>
+        <span class="skill-tag">uni-app</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <h3>AI 辅助设计</h3>
+      <div class="skill-tags">
+        <span class="skill-tag ai">AI 生图</span>
+        <span class="skill-tag ai">智能排版</span>
+        <span class="skill-tag ai">创意探索</span>
+        <span class="skill-tag ai">AI 工作流</span>
+      </div>
+    </div>
+    <div class="skill-category">
+      <h3>综合能力</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">UI 设计</span>
+        <span class="skill-tag">交互设计</span>
+        <span class="skill-tag">数据可视化</span>
+        <span class="skill-tag">设计规范</span>
+        <span class="skill-tag">组件库</span>
+        <span class="skill-tag">项目协调</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Work Experience ===== -->
+<section class="section">
+  <div class="section-label">03 — Work Experience</div>
+  <h2 class="section-title">工作经历</h2>
+  <p class="section-desc">三段职业经历，从初创外企到万人大厂，持续深耕 UI 设计与前端开发领域。</p>
+  <div class="timeline">
+    <!-- Job 1 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-header">
+        <span class="timeline-company">深圳市人力资本有限公司</span>
+        <span class="timeline-period">2017/07 — 至今</span>
+      </div>
+      <div class="timeline-role">UI 设计师 & 前端开发</div>
+      <div class="timeline-meta">
+        <span>行业：互联网</span>
+        <span>规模：10000人以上</span>
+      </div>
+      <div class="timeline-desc">
+        <ul>
+          <li>公众号升级改版，关注量从 800w 上升到 1600w</li>
+          <li>多个工作项目上线，包括小程序、网页、后台管理页面</li>
+          <li>后台管理系统数据可视化设计</li>
+          <li>公众号 & 小程序页面设计、页面和图标动效设计</li>
+          <li>H5 前端页面开发 & 网站前端页面开发、小程序前端页面开发</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Job 2 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-header">
+        <span class="timeline-company">米科杜智能软件有限公司</span>
+        <span class="timeline-period">2015/06 — 2017/06</span>
+      </div>
+      <div class="timeline-role">UI 设计师</div>
+      <div class="timeline-meta">
+        <span>行业：互联网</span>
+        <span>规模：100人以下</span>
+      </div>
+      <div class="timeline-desc">
+        <ul>
+          <li>负责 App 页面设计，改进用户体验</li>
+          <li>确定网站流程及界面设计</li>
+          <li>改进产品用户体验，提出更加合理的交互流程和交互效果</li>
+          <li>跟进 App 的开发进度</li>
+        </ul>
+      </div>
+    </div>
+    <!-- Job 3 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-header">
+        <span class="timeline-company">斯塔沃信息咨询（深圳）有限公司</span>
+        <span class="timeline-period">2014/07 — 2015/04</span>
+      </div>
+      <div class="timeline-role">UI 设计师</div>
+      <div class="timeline-meta">
+        <span>行业：商业咨询</span>
+        <span>性质：外企</span>
+        <span>规模：10-20人</span>
+      </div>
+      <div class="timeline-desc">
+        <ul>
+          <li>北京泰康总部电话销售系统的改进设计</li>
+          <li>平安保险移动端销售系统设计</li>
+          <li>负责 App 页面设计，改进用户体验</li>
+          <li>确定网站流程及界面设计</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Project Summary ===== -->
+<section class="section" style="background: var(--bg2);">
+  <div class="section-label">04 — Projects</div>
+  <h2 class="section-title">项目作品</h2>
+  <p class="section-desc">点击查看各项目的完整设计展示与详细介绍。</p>
+  <div class="projects-grid">
+    <a href="./online-cs-app.html" class="project-card">
+      <img class="project-card-img" src="./assets/cs-app/1.0_04.首页.jpg" alt="在线客服 APP">
+      <div class="project-card-body">
+        <span class="project-card-tag">01 · Customer Service App</span>
+        <h3>在线客服 APP</h3>
+        <p>负责在线客服 APP 整体页面 UI 设计，包括消息列表、聊天界面、客户详情、快捷回复等核心模块。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="./remote-mini.html" class="project-card">
+      <img class="project-card-img" src="./assets/remote-mini/v4-首页1.0.jpg" alt="远程柜台小程序">
+      <div class="project-card-body">
+        <span class="project-card-tag">02 · Remote Counter Mini</span>
+        <h3>远程柜台小程序</h3>
+        <p>独立负责小程序从 UI 设计到前端开发的完整交付，覆盖用户注册登录、业务预约、语音输入、办理进度查询等全流程。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="./intensive-portal.html" class="project-card">
+      <img class="project-card-img" src="./assets/intensive-portal/工作台-视频客服.jpg" alt="集约门户">
+      <div class="project-card-body">
+        <span class="project-card-tag">03 · Intensive Portal</span>
+        <h3>集约门户</h3>
+        <p>负责集约门户客服工作平台的整体 UI 设计，涵盖工作台首页、话务管理、客户信息、会话窗口等核心功能模块。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="./monitoring-dashboard.html" class="project-card">
+      <img class="project-card-img" src="./assets/monitoring/1-资源利用统计.jpg" alt="一体化监控看板">
+      <div class="project-card-body">
+        <span class="project-card-tag">04 · Monitoring Dashboard</span>
+        <h3>一体化监控看板</h3>
+        <p>负责一体化监控看板的数据可视化 UI 设计，将复杂业务数据转化为直观的图表与看板界面。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="./im-client.html" class="project-card">
+      <img class="project-card-img" src="./assets/im-client/3.0-04文字会话-展开.jpg" alt="IM 客户端">
+      <div class="project-card-body">
+        <span class="project-card-tag">05 · IM Client</span>
+        <h3>IM 客户端</h3>
+        <p>负责 IM 客户端的整体页面 UI 设计与交互规范制定。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+    <a href="./remote-counter.html" class="project-card">
+      <img class="project-card-img" src="./assets/remote-counter/呼叫状态01.jpg" alt="远程柜台客服">
+      <div class="project-card-body">
+        <span class="project-card-tag">06 · Remote Counter</span>
+        <h3>远程柜台客服</h3>
+        <p>负责远程柜台客服系统的 UI 设计，包含视频客服、业务办理流程、核心功能与安全合规等模块。</p>
+        <div class="project-card-link">查看详情 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ===== Contact ===== -->
+<section class="contact-bar">
+  <div class="contact-inner">
+    <div class="contact-cta">Let's connect.</div>
+    <div class="contact-info">
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        13265440176
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:Sean1991@foxmail.com" style="color:inherit;">Sean1991@foxmail.com</a>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        深圳
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <p>沈阳波 · UI Designer & Frontend Developer</p>
+</footer>
+
+</body>
+</html>
